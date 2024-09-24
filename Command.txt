@@ -1,0 +1,75 @@
+docker -v  เวอร์ชั่น
+docker ps 
+docker ps --all
+docker run hello-world
+docker run busybox echo 'hello world in docker'
+docker run busybox ping google.com
+docker run stop image
+docker pull busybox
+docker create busybox ping google.com
+docker start image
+docker stop image
+docker system prune * เอาไว้ลบcontainer y ลบหมด
+docker run nginx
+docker exec id container ls
+docker exec -it id container sh
+docker exec -it id container bash
+docker rm id container
+docker run -p 80:80
+docker run -p 8800:80
+docker ps
+docker run -d -p 7800:80 nginx
+docker images
+docker system df
+docker image rm hello-world
+
+docker pull wordpress
+docker pull mysql:5.7
+docker pull phpmyadmin/phpmyadmin
+
+**create network
+
+docker network create wordpress
+docker network ls
+docker network  rm wordpress
+
+
+docker run --name mysql --network wordpress -e MYSQL_ROOT_PASSWORD=1111 -e MYSQL_DATABASE=wordpress_db -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress -d mysql:5.7
+docker run --name pma --network wordpress -p 8888:80 -e PMA_ARBITRARY=1 -d phpmyadmin/phpmyadmin
+docker run -d --name wordpress --network wordpress -p 888:80 -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress_db wordpress
+
+
+**Show network
+docker network inspect wordpress
+
+แบบ 1
+docker exec -it pma sh
+apt-get update
+apt-get install vim
+vi a.text กด i พิมพ์ข้อมูล กด esc ออก :wq enter save
+
+apt-get update
+apt-get install bash
+
+แบบ 2 volum
+docker volume ls
+docker volum create wp_volume
+docker volum create mysql_volume
+docker volum rm wp_volume mysql_volume
+
+docker container inspect wordpress
+ที่อยู่ volum /var/www/html
+
+docker container inspect mysql
+ที่อยู่ volum /var/lib/mysql
+
+สร้างเอง
+docker volum create wp_volume
+docker volum create mysql_volume
+docker network create wordpress02
+docker nerwork ls
+docker volume ls
+
+docker run -d --name mysql02 --network wordpress02 -v mysql_volumn:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=1111 -e MYSQL_DATABASE=wordpress02_db -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress -d mysql:5.7
+docker run --name pma02 --network wordpress02 -p 8889:80 -e PMA_ARBITRARY=1 -d phpmyadmin/phpmyadmin
+docker run -d --name wordpress02 --network wordpress02 -v wp_volumn:/var/www/html -e WORDPRESS_DB_HOST=mysql02 -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress02_db -p 889:80 wordpress
